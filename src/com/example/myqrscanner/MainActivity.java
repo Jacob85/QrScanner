@@ -5,6 +5,8 @@ import com.google.zxing.integration.android.IntentResult;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.util.Log;
 import android.view.Menu;
@@ -40,11 +42,37 @@ public class MainActivity extends Activity {
 	public void CreateQR(View V)
 	{
 		EditText mytxt = (EditText) findViewById(R.id.editText1);
+		
+		if (mytxt.getText().toString() == null)
+		{
+			myAlertDialog("Error", "Please enter any text");
+			return;
+		}
 		//initialization
 		IntentIntegrator integrator = new IntentIntegrator(this);
 		//Generate QR
 		Log.i("String From Qr Code Scanned", mytxt.getText().toString());
 		integrator.shareText(mytxt.getText().toString());
+	}
+	public void myAlertDialog(String titel, String message)
+	{
+		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+		// set title
+		alertDialogBuilder.setTitle(titel);  	
+		// set dialog message
+		alertDialogBuilder.setMessage(message)
+						  .setCancelable(false)
+						  .setPositiveButton("OK",new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,int id) {
+								// if this button is clicked, close the dilaog
+								dialog.cancel();
+								return;
+							}
+						  });
+		// create alert dialog
+		AlertDialog alertDialog = alertDialogBuilder.create();
+		// show it
+		alertDialog.show();
 	}
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
